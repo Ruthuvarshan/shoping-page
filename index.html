@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase | Online Shopping</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+  <style>
+    body {
+      background: #f5f6fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background: #172554;
+    }
+
+    .navbar-brand {
+      font-size: 25px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .navbar-brand span {
+      color: #fbbf24;
+    }
+
+    .hero {
+      background: linear-gradient(120deg, #172554, #2563eb);
+      color: white;
+      padding: 55px 20px;
+      border-radius: 14px;
+      margin-top: 25px;
+    }
+
+    .hero h1 {
+      font-weight: 800;
+    }
+
+    .product-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 22px #00000018;
+    }
+
+    .product-img {
+      height: 190px;
+      width: 100%;
+      object-fit: cover;
+      background: #e5e7eb;
+    }
+
+    .product-title {
+      font-size: 16px;
+      font-weight: 700;
+      min-height: 40px;
+    }
+
+    .price {
+      color: #1d4ed8;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .old-price {
+      color: #888;
+      text-decoration: line-through;
+      font-size: 13px;
+    }
+
+    .category-badge {
+      background: #e0e7ff;
+      color: #1e40af;
+    }
+
+    .add-btn {
+      background: #172554;
+      color: white;
+      border: none;
+    }
+
+    .add-btn:hover {
+      background: #2563eb;
+      color: white;
+    }
+
+    .section-title {
+      font-weight: 800;
+      color: #172554;
+    }
+
+    .search-box {
+      max-width: 400px;
+    }
+
+    .cart-item img {
+      width: 65px;
+      height: 65px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    footer {
+      background: #172554;
+      color: white;
+      margin-top: 60px;
+      padding: 30px 15px;
+    }
+
+    .empty-message {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      Shop<span>Ease</span>
+    </a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#products">Products</a>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-warning position-relative"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#cartPanel">
+            <i class="bi bi-cart3"></i> Cart
+            <span id="cartCount"
+                  class="badge bg-danger rounded-pill">0</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- HERO SECTION -->
+  <section class="hero text-center">
+    <h1>Discover Your Next Favorite</h1>
+    <p class="lead mt-3">
+      Great products. Great prices. All in one place.
+    </p>
+    <a href="#products" class="btn btn-warning btn-lg mt-2">
+      Shop Now <i class="bi bi-arrow-right"></i>
+    </a>
+  </section>
+
+  <!-- SEARCH AND FILTER -->
+  <section id="products" class="mt-5">
+
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+      <div>
+        <h2 class="section-title mb-1">Our Products</h2>
+        <p class="text-secondary mb-0">
+          <span id="productCount">20</span> products available
+        </p>
+      </div>
+
+      <div class="input-group search-box">
+        <span class="input-group-text bg-white">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="text" id="searchInput"
+               class="form-control"
+               placeholder="Search products...">
+      </div>
+    </div>
+
+    <!-- CATEGORY BUTTONS -->
+    <div class="d-flex flex-wrap gap-2 mb-4" id="categoryFilters">
+      <button class="btn btn-primary category-btn"
+              data-category="All">All</button>
+      <button class="btn btn-outline-primary category-btn"
+              data-category="Electronics">Electronics</button>
+      <button class="btn btn-outline-primary category-btn"
+              data-category="Fashion">Fashion</button>
+      <button class="btn btn-outline-primary category-btn"
+              data-category="Home">Home</button>
+      <button class="btn btn-outline-primary category-btn"
+              data-category="Accessories">Accessories</button>
+      <button class="btn btn-outline-primary category-btn"
+              data-category="Sports">Sports</button>
+    </div>
+
+    <!-- SORT -->
+    <div class="d-flex justify-content-end mb-3">
+      <select id="sortSelect" class="form-select"
+              style="max-width: 220px;">
+        <option value="default">Sort: Recommended</option>
+        <option value="low">Price: Low to High</option>
+        <option value="high">Price: High to Low</option>
+        <option value="name">Name: A to Z</option>
+      </select>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="row g-4" id="productGrid"></div>
+
+    <div id="emptyMessage" class="empty-message text-center py-5">
+      <i class="bi bi-search display-4 text-secondary"></i>
+      <h4 class="mt-3">No products found</h4>
+      <p class="text-secondary">Try another search or category.</p>
+    </div>
+
+  </section>
+</div>
+
+<!-- SHOPPING CART OFFCANVAS -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartPanel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold">
+      <i class="bi bi-cart3"></i> Your Shopping Cart
+    </h5>
+    <button type="button" class="btn-close"
+            data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <div id="cartItems"></div>
+
+    <div id="cartEmpty" class="text-center py-5">
+      <i class="bi bi-cart-x display-3 text-secondary"></i>
+      <p class="mt-3">Your cart is empty.</p>
+    </div>
+
+    <div id="cartSummary" class="border-top pt-3 mt-3 d-none">
+      <div class="d-flex justify-content-between mb-2">
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">₹0</strong>
+      </div>
+      <div class="d-flex justify-content-between mb-3">
+        <span>Delivery</span>
+        <span class="text-success">FREE</span>
+      </div>
+      <div class="d-flex justify-content-between fs-5 mb-3">
+        <strong>Total</strong>
+        <strong id="cartTotal">₹0</strong>
+      </div>
+      <button class="btn btn-success w-100" onclick="checkout()">
+        Proceed to Checkout
+      </button>
+      <p class="text-secondary text-center small mt-2">
+        Demo checkout only. No payment is processed.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT DEMO MODAL -->
+<div class="modal fade" id="checkoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Demo Checkout</h5>
+        <button type="button" class="btn-close"
+                data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-check-circle-fill text-success display-3"></i>
+        <h4 class="mt-3">Order Summary Ready!</h4>
+        <p id="checkoutMessage" class="text-secondary"></p>
+        <p>This is a frontend demonstration. No real order was placed.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-dismiss="modal">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="text-center">
+  <h4 class="fw-bold">ShopEase</h4>
+  <p class="mb-2">Your one-stop demo shopping destination.</p>
+  <p class="small mb-0">
+    &copy; 2026 ShopEase. Educational project.
+  </p>
+</footer>
+
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // 20 SAMPLE PRODUCTS - NO DATABASE REQUIRED
+  const products = [
+    {
+      id: 1, name: "Wireless Headphones",
+      category: "Electronics", price: 1499, oldPrice: 1999,
+      rating: 4.5,
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"
+    },
+    {
+      id: 2, name: "Smart Watch",
+      category: "Electronics", price: 2499, oldPrice: 3299,
+      rating: 4.3,
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"
+    },
+    {
+      id: 3, name: "Running Shoes",
+      category: "Fashion", price: 1899, oldPrice: 2499,
+      rating: 4.4,
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+    },
+    {
+      id: 4, name: "Casual Backpack",
+      category: "Accessories", price: 999, oldPrice: 1499,
+      rating: 4.2,
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"
+    },
+    {
+      id: 5, name: "Classic Sunglasses",
+      category: "Accessories", price: 699, oldPrice: 999,
+      rating: 4.1,
+      image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500"
+    },
+    {
+      id: 6, name: "Bluetooth Speaker",
+      category: "Electronics", price: 1299, oldPrice: 1799,
+      rating: 4.4,
+      image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500"
+    },
+    {
+      id: 7, name: "Men's Casual T-Shirt",
+      category: "Fashion", price: 499, oldPrice: 799,
+      rating: 4.0,
+      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"
+    },
+    {
+      id: 8, name: "Women's Handbag",
+      category: "Fashion", price: 1599, oldPrice: 2199,
+      rating: 4.5,
+      image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"
+    },
+    {
+      id: 9, name: "Desk Lamp",
+      category: "Home", price: 899, oldPrice: 1199,
+      rating: 4.2,
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500"
+    },
+    {
+      id: 10, name: "Coffee Mug",
+      category: "Home", price: 299, oldPrice: 449,
+      rating: 4.1,
+      image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500"
+    },
+    {
+      id: 11, name: "Mechanical Keyboard",
+      category: "Electronics", price: 2799, oldPrice: 3499,
+      rating: 4.6,
+      image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500"
+    },
+    {
+      id: 12, name: "Wireless Mouse",
+      category: "Electronics", price: 599, oldPrice: 899,
+      rating: 4.3,
+      image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500"
+    },
+    {
+      id: 13, name: "Travel Water Bottle",
+      category: "Sports", price: 399, oldPrice: 599,
+      rating: 4.0,
+      image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500"
+    },
+    {
+      id: 14, name: "Yoga Mat",
+      category: "Sports", price: 799, oldPrice: 1099,
+      rating: 4.4,
+      image: "https://images.unsplash.com/photo-1592432678016-e910b452f9a2?w=500"
+    },
+    {
+      id: 15, name: "Modern Wall Clock",
+      category: "Home", price: 649, oldPrice: 899,
+      rating: 4.1,
+      image: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=500"
+    },
+    {
+      id: 16, name: "Leather Wallet",
+      category: "Accessories", price: 549, oldPrice: 799,
+      rating: 4.2,
+      image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=500"
+    },
+    {
+      id: 17, name: "Denim Jacket",
+      category: "Fashion", price: 2199, oldPrice: 2999,
+      rating: 4.5,
+      image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500"
+    },
+    {
+      id: 18, name: "Football",
+      category: "Sports", price: 699, oldPrice: 999,
+      rating: 4.3,
+      image: "https://images.unsplash.com/photo-1614632537423-1e6c2e7e0e4e?w=500"
+    },
+    {
+      id: 19, name: "Table Plant Pot",
+      category: "Home", price: 349, oldPrice: 499,
+      rating: 4.0,
+      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=500"
+    },
+    {
+      id: 20, name: "Digital Camera",
+      category: "Electronics", price: 8999, oldPrice: 10999,
+      rating: 4.7,
+      image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500"
+    }
+  ];
+
+  // APPLICATION STATE
+  let selectedCategory = "All";
+  let cart = [];
+
+  const grid = document.getElementById("productGrid");
+  const searchInput = document.getElementById("searchInput");
+  const sortSelect = document.getElementById("sortSelect");
+
+  // FORMAT PRICE IN INDIAN RUPEES
+  function money(amount) {
+    return "₹" + amount.toLocaleString("en-IN");
+  }
+
+  // DISPLAY PRODUCTS
+  function renderProducts() {
+    const query = searchInput.value.trim().toLowerCase();
+
+    let filtered = products.filter(product => {
+      const matchesName =
+        product.name.toLowerCase().includes(query);
+
+      const matchesCategory =
+        selectedCategory === "All" ||
+        product.category === selectedCategory;
+
+      return matchesName && matchesCategory;
+    });
+
+    if (sortSelect.value === "low") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortSelect.value === "high") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortSelect.value === "name") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    document.getElementById("productCount").textContent =
+      filtered.length;
+
+    document.getElementById("emptyMessage").style.display =
+      filtered.length ? "none" : "block";
+
+    grid.innerHTML = filtered.map(product => `
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card product-card shadow-sm">
+          <img
+            src="${product.image}"
+            class="product-img"
+            alt="${product.name}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='https://placehold.co/500x350/e5e7eb/334155?text=Product+Image'">
+
+          <div class="card-body d-flex flex-column">
+            <span class="badge category-badge align-self-start mb-2">
+              ${product.category}
+            </span>
+
+            <h5 class="product-title">${product.name}</h5>
+
+            <div class="small text-warning mb-2">
+              <i class="bi bi-star-fill"></i>
+              ${product.rating}
+              <span class="text-secondary">/ 5</span>
+            </div>
+
+            <div class="mb-3">
+              <span class="price">${money(product.price)}</span>
+              <span class="old-price ms-1">
+                ${money(product.oldPrice)}
+              </span>
+            </div>
+
+            <button class="btn add-btn mt-auto w-100"
+                    onclick="addToCart(${product.id})">
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // ADD PRODUCT TO CART
+  function addToCart(id) {
+    const existing = cart.find(item => item.id === id);
+
+    if (existing) {
+      existing.quantity++;
+    } else {
+      cart.push({ id: id, quantity: 1 });
+    }
+
+    renderCart();
+  }
+
+  // CHANGE QUANTITY
+  function changeQuantity(id, change) {
+    const item = cart.find(item => item.id === id);
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+      cart = cart.filter(item => item.id !== id);
+    }
+
+    renderCart();
+  }
+
+  // REMOVE ITEM
+  function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    renderCart();
+  }
+
+  // DISPLAY CART
+  function renderCart() {
+    const cartItems = document.getElementById("cartItems");
+    const cartEmpty = document.getElementById("cartEmpty");
+    const cartSummary = document.getElementById("cartSummary");
+
+    const count = cart.reduce(
+      (sum, item) => sum + item.quantity, 0
+    );
+
+    const total = cart.reduce((sum, item) => {
+      const product = products.find(p => p.id === item.id);
+      return sum + product.price * item.quantity;
+    }, 0);
+
+    document.getElementById("cartCount").textContent = count;
+    document.getElementById("cartSubtotal").textContent = money(total);
+    document.getElementById("cartTotal").textContent = money(total);
+
+    cartEmpty.classList.toggle("d-none", cart.length > 0);
+    cartSummary.classList.toggle("d-none", cart.length === 0);
+
+    cartItems.innerHTML = cart.map(item => {
+      const product = products.find(p => p.id === item.id);
+
+      return `
+        <div class="cart-item d-flex gap-3 mb-4">
+          <img src="${product.image}" alt="${product.name}"
+               onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Product'">
+
+          <div class="flex-grow-1">
+            <h6 class="fw-bold mb-1">${product.name}</h6>
+            <div class="text-primary fw-bold mb-2">
+              ${money(product.price * item.quantity)}
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-outline-secondary"
+                      onclick="changeQuantity(${item.id}, -1)"
+                      aria-label="Decrease quantity">−</button>
+
+              <span>${item.quantity}</span>
+
+              <button class="btn btn-sm btn-outline-secondary"
+                      onclick="changeQuantity(${item.id}, 1)"
+                      aria-label="Increase quantity">+</button>
+
+              <button class="btn btn-sm btn-outline-danger ms-auto"
+                      onclick="removeFromCart(${item.id})">
+                <i class="bi bi-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // DEMO CHECKOUT
+  function checkout() {
+    if (cart.length === 0) return;
+
+    const count = cart.reduce(
+      (sum, item) => sum + item.quantity, 0
+    );
+
+    const total = cart.reduce((sum, item) => {
+      const product = products.find(p => p.id === item.id);
+      return sum + product.price * item.quantity;
+    }, 0);
+
+    document.getElementById("checkoutMessage").textContent =
+      `${count} item(s), total ${money(total)}.`;
+
+    bootstrap.Offcanvas.getOrCreateInstance(
+      document.getElementById("cartPanel")
+    ).hide();
+
+    bootstrap.Modal.getOrCreateInstance(
+      document.getElementById("checkoutModal")
+    ).show();
+  }
+
+  // CATEGORY FILTER
+  document.querySelectorAll(".category-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      selectedCategory = button.dataset.category;
+
+      document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-outline-primary");
+      });
+
+      button.classList.remove("btn-outline-primary");
+      button.classList.add("btn-primary");
+
+      renderProducts();
+    });
+  });
+
+  // SEARCH AND SORT
+  searchInput.addEventListener("input", renderProducts);
+  sortSelect.addEventListener("change", renderProducts);
+
+  // INITIALIZE WEBSITE
+  renderProducts();
+  renderCart();
+</script>
+
+</body>
+</html>
